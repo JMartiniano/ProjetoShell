@@ -1,0 +1,1 @@
+[1] - Botar uma opção DADOS DO ARQUIVO para mostrar dados como permissões com data e hora, tamanho, caminho do arquivo e  numero de linhas caso seja txt

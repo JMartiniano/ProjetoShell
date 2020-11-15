@@ -33,3 +33,24 @@ function arqsh () {
 	done
 }
 
+function permissoes () {
+	echo " $(ls ${arq}) "
+	
+}
+
+function tamanho () {
+	du -hsm ${arq}
+}
+
+function caminhoArq () {
+	echo "$(pwd)/${arq}"
+}
+
+function numLinhas () {
+	cat ${arq} | wc -l
+}
+
+function executar () {
+	./${arq}
+}
+

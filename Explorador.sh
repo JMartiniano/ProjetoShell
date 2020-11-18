@@ -62,6 +62,7 @@ function executar () {
 	./${arq}
 }
 
+
 # Settings
 
 touch backupSettings.sh
@@ -85,7 +86,8 @@ do
 
 	if [ ${opt} ==  a ]; then	
 		echo -e "\n--> Opção 'a' selecionada"
-		echo -e  "Mostrando arquivos locais\n"
+		e
+		cho -e  "Mostrando arquivos locais\n"
 		arq
 
 	elif [ ${opt} == b ];then

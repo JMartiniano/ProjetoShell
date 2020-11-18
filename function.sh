@@ -62,13 +62,13 @@ function atualdir () {
 	pwd
 }
 	 
-function previdir () {
+function prev_dir () {
 	cd ../
 	ls
 }
 
-function entrardir () {
-	(Chamar função listar diretórios)
+function enter_dir () {
+	dir
 	read -p "Digite o nome do diretório que deseja entrar" dir
 	cd ./$dir
 	ls
@@ -85,20 +85,28 @@ function pesquisa () {
 			"a") 
 				read -p "Digite o diretório que deseja buscar: " dir
 				busca=$(find /home -name $dir)
-				if [ -z $busca ]
+				if [ -z $busca ];
 				then
 					echo "Este diretório não existe"
-					exit 0
-				fi  ;;
+				fi 2> /dev/null  
+				echo "O diretório se encontra no: ${busca}"
+				;;
 			"b")
 			       read -p "Digite o arquivo que deseja buscar: " arq
-		       		busca=$(find /home -namr $arq)
-		 		if [ -z $busca ]
+		       		busca=$(find /home -name $arq)
+		 		if [ -z $busca ];
 				then
-					echo "Este arquivo não existe"
-					exit 0		
-				fi ;;
+					echo "Este arquivo não existe"		
+				fi 2> /dev/null
+				echo "O arquivo se encontra no: ${busca}"
+				;;
 			"q") break ;;
 		esac
 	done
 }
+
+function clear_terminal () {
+	clear
+}
+
+

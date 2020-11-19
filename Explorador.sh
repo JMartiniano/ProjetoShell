@@ -19,6 +19,7 @@ function arq () {
 			echo " [${cont}] ${i} "
 		fi
 	done
+	echo -e "Total de arquivos: ${cont}\n"
 }
 
 function arqtxt () {
@@ -108,54 +109,79 @@ function propriedades () {
 
 
 function subArq () {
-	read -p "Nome do arquivo: " arq
-	while true; do
-		echo -e "\n"
-		# read -p "Nome do arquivo: " arq
-		echo -e "\n--> Submenu de Arquivos"
-		echo -e "\na) Ler arquivo"
-		echo "b) Editar o arquivo com VIM"
-		echo "c) Editar o arquivo com NANO"
-		echo "d) Deletar o arquivo"
-		echo "e) Copiar o arquivo"
-		echo "d) Mover o arquivo"
-		echo "f) Renomear o arquivo"
-		echo "g) Propriedades do arquivo"
-		echo "q) Sair"
-		read -p "Escolha uma opção: " opt
+	if [ -f ${arq} ];then
+		while true; do
+			echo -e "\n--> Submenu de Arquivos"
+			echo -e "\na) Ler arquivo"
+			echo "b) Editar com VIM"
+			echo "c) Editar com NANO"
+			echo "d) Apagar"
+			echo "e) Copiar"
+			echo "d) Mover"
+			echo "f) Renomear"
+			echo "g) Propriedades"
+			echo "h) Criar novo arquivo"
+			echo "i) Mudar permissões"
+			echo -e "q) Sair\n"
+			read -p "Escolha uma opção: " opt
 
-		case ${opt} in
-			"a")
-				echo -e "\nMostrando o arquivo ${arq}\n"
-				cat ${arq} ;;
-			"b")
-				vim ${arq} ;;
-			"c")
-				nano ${arq} ;;
-			"d")
-				echo -e "\nRemovendo o arquivo ${arq}"
-				rm ${arq}
-				echo -e "\nArquivo apagado: \n ls" ;;
-			"e")
-				echo -e "\nCopiando o arquivo "
-				read -p "Qual o caminho do destino: " dest
-				cp ${arq} ${dest} ;;
-			"d")
-				echo -e "\nMovendo o arquivo"
-				read -p "Qual o caminho do destino: " dest
-				mv ${arq} ${dest} ;;
-			"f")
-				echo -e "\nRenomeando o arquivo"
-				read -p "Novo nome: " name
-				mv ${arq} ${name} ;;
-			"g")
-				echo -e "\nPropriedades do arquivo"
-				propriedades ;;
-			"q")
-				break
-		esac
-	done
+			case ${opt} in
+				"a")	
+					echo -e "\nMostrando o arquivo ${arq}\n"
+					read -p "Nome do arquivo: " arq
+					echo -e "===== Começo do arquivo =====\n" 
+					cat ${arq} 
+					echo -e "\n===== Fim do Arquivo =====";;
+				"b")	
+					read -p "Nome do arquivo: " arq
+					vim ${arq} ;;
+				"c")
+					read -p "Nome do arquivo: " arq
+					nano ${arq} ;;
+				"d")
+					echo -e "\nApagando o arquivo ${arq}"
+					read -p "Nome do arquivo: " arq
+					rm ${arq}
+					echo -e "\nArquivo ${arq} apagado" ;;
+				"e")
+					echo -e "\nCopiando o arquivo "
+					read -p "Nome do arquivo: " arq
+					read -p "Qual o caminho do destino: " dest
+					cp ${arq} ${dest} ;;
+				"d")
+					echo -e "\nMovendo o arquivo"
+					read -p "Nome do arquivo: " arq
+					read -p "Qual o caminho do destino: " dest
+					mv ${arq} ${dest} ;;
+				"f")
+					echo -e "\nRenomeando o arquivo"
+					read -p "Nome do arquivo: " arq
+					read -p "Novo nome: " name
+					mv ${arq} ${name} 
+					arq=${name} ;;
+				"g")
+					echo -e "\nPropriedades do arquivo"
+					read -p "Nome do arquivo: " arq
+					propriedades ;;
+				"h")
+					read -p "Nome do arquivo: " arq
+					touch ${arq}
+					echo -e "Arquivo criado:\n $(ls -l ${arq})" ;;
+				"i") 
+					echo -e "\nMudando permissões do arquivo"
+					read -p "Nome do arquivo: " arq
+					read -p "Digite as permissões em forma binária: " permi
+					chmod ${permi} ${arq}
+					echo -e "Permissões modificadas:\n $(ls -l ${arq})" ;;
+					
+				"q")
+					break
+			esac
 
+		done
+	else
+		echo "${arq} não é um arquivo"
+	fi
 }
 
 # Settings

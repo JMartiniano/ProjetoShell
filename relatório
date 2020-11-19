@@ -1,3 +1,5 @@
 Neste arquivo vamos adicionar uma linha com o seu nome,  data e hora e espceficiar o que você fez. Para ajudar o outro. 
 
 José 18/11 22h -> Alterei o arquivo Explorador.sh, adcionei na sessão de funções as funções propriedades (que lista as propriedades de um arquivo)e subArq (que gera o submenu para a opção arquivos, então quando o usuário abrir os arquivos vai ter um segundo menu com as opções de maninuplar o arquivo) e deixei isso tudo funcionando.
+
+José 19/11 20h50 --> Ajeitei o submenu dos arquivos 

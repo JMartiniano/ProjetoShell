@@ -19,6 +19,7 @@ function arq () {
 			echo " [${cont}] ${i} "
 		fi
 	done
+	echo -e "Total de arquivos: ${cont}\n"
 }
 
 function arqtxt () {
@@ -42,7 +43,7 @@ function arqsh () {
 }
 
 function permissoes () {
-	echo " $(ls ${arq}) "
+	echo " $(ls -l ${arq}) "
 	
 }
 
@@ -62,6 +63,126 @@ function executar () {
 	./${arq}
 }
 
+function pesquisa () {
+	while true;
+	do
+		echo -e "\n--> Submenu de Pesquisa"
+		echo -e "\na) Arquivo"
+		echo "b) Diretório"
+		echo -e "q) Sair\n"
+		read -p "Escolha uma opção: " opt
+
+		case $opt in
+			"b") 
+				echo -e "\n--> Opção 'b' selecionada"
+				read -p "Digite o diretório que deseja buscar: " dir
+				busca=$(find / -name $dir | tr ' ' '\n' 2>> /dev/null)
+				if [ -z $busca ];
+				then
+					echo -e "\nEste diretório não existe"
+				fi 2> /dev/null  
+				echo -e "\nO diretório se encontra no: \n${busca}"
+				;;
+			"a")
+				echo -e "\n--> Opção 'a' selecionada"
+			       	read -p "Digite o arquivo que deseja buscar: " arq
+		       		busca=$(find / -name $arq | tr ' ' '\n')
+		 		if [ -z $busca ];
+				then
+					echo -e "Este arquivo não existe"		
+				fi 2> /dev/null
+				echo -e "\nO arquivo se encontra no: \n${busca}"
+				;;
+			"q") break ;;
+		esac
+	done
+}
+
+function propriedades () {
+	echo -e "\nPropriedades\n"
+	echo "Tamanho do arquivo: $(du -hsm ${arq})"
+	echo "Quantidade de linhas: $(cat ${arq} | wc -l)"
+	echo "Permissões: "
+	permissoes
+	
+}
+
+
+function subArq () {
+	if [ -f ${arq} ];then
+		while true; do
+			echo -e "\n--> Submenu de Arquivos"
+			echo -e "\na) Ler arquivo"
+			echo "b) Editar com VIM"
+			echo "c) Editar com NANO"
+			echo "d) Apagar"
+			echo "e) Copiar"
+			echo "d) Mover"
+			echo "f) Renomear"
+			echo "g) Propriedades"
+			echo "h) Criar novo arquivo"
+			echo "i) Mudar permissões"
+			echo -e "q) Sair\n"
+			read -p "Escolha uma opção: " opt
+
+			case ${opt} in
+				"a")	
+					echo -e "\nMostrando o arquivo ${arq}\n"
+					read -p "Nome do arquivo: " arq
+					echo -e "===== Começo do arquivo =====\n" 
+					cat ${arq} 
+					echo -e "\n===== Fim do Arquivo =====";;
+				"b")	
+					read -p "Nome do arquivo: " arq
+					vim ${arq} ;;
+				"c")
+					read -p "Nome do arquivo: " arq
+					nano ${arq} ;;
+				"d")
+					echo -e "\nApagando o arquivo ${arq}"
+					read -p "Nome do arquivo: " arq
+					rm ${arq}
+					echo -e "\nArquivo ${arq} apagado" ;;
+				"e")
+					echo -e "\nCopiando o arquivo "
+					read -p "Nome do arquivo: " arq
+					read -p "Qual o caminho do destino: " dest
+					cp ${arq} ${dest} ;;
+				"d")
+					echo -e "\nMovendo o arquivo"
+					read -p "Nome do arquivo: " arq
+					read -p "Qual o caminho do destino: " dest
+					mv ${arq} ${dest} ;;
+				"f")
+					echo -e "\nRenomeando o arquivo"
+					read -p "Nome do arquivo: " arq
+					read -p "Novo nome: " name
+					mv ${arq} ${name} 
+					arq=${name} ;;
+				"g")
+					echo -e "\nPropriedades do arquivo"
+					read -p "Nome do arquivo: " arq
+					propriedades ;;
+				"h")
+					read -p "Nome do arquivo: " arq
+					touch ${arq}
+					echo -e "Arquivo criado:\n $(ls -l ${arq})" ;;
+				"i") 
+					echo -e "\nMudando permissões do arquivo"
+					read -p "Nome do arquivo: " arq
+					read -p "Digite as permissões em forma binária: " permi
+					chmod ${permi} ${arq}
+					echo -e "Permissões modificadas:\n $(ls -l ${arq})" ;;
+					
+				"q")
+					break
+			esac
+
+		done
+	else
+		echo "${arq} não é um arquivo"
+	fi
+}
 
 # Settings
 
@@ -75,20 +196,21 @@ echo -e "\nEXPLORADOR DE ARQUIVOS - LINUX\nVersão 1.0.0\nUsuário corrente: $(w
 
 while true; 
 do
-	echo -e "--> Menu\n"
+	echo -e "\n--> Menu\n"
 	echo "a) Arquivos"
 	echo "b) Diretórios"
 	echo "c) Tudo"
 	echo "d) Fazer Backup para outra máquina na rede"
 	echo "e) Limpar tela"
+	echo "p) Pesquisar"
 	echo -e "q) Sair\n"
 	read -p "Escolha uma opção: " opt
 
 	if [ ${opt} ==  a ]; then	
 		echo -e "\n--> Opção 'a' selecionada"
-		e
-		cho -e  "Mostrando arquivos locais\n"
+		echo -e  "Mostrando arquivos locais\n"
 		arq
+		subArq
 
 	elif [ ${opt} == b ];then
 	       	echo -e "\n--> Opção 'b' selecionada"
@@ -119,6 +241,10 @@ do
 			scp ./* ${user}@${ip}:/home/${user}/Backup/${data} && echo -e "\nBackup concluído no caminho: /home/${user}/backup/${data}" || echo -e "\nAlgo deu errado, tente novamente!"
 			
 		fi
+	
+	elif [ ${opt} == p ];then
+		pesquisa
+
 	elif [ ${opt} == e ];then
 		clear
 

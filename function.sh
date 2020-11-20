@@ -74,6 +74,18 @@ function enter_dir () {
 	ls
 }
 
+function rm_dir_not_empty () {
+	read -p "Digite o diretório que deseja remover: " dir
+	rm -rf $dir
+}
+
+function make_dir () {
+	read -p "Digite o nome do diretório que deseja criar: " dir
+	mkdir $dir
+}
+
+
+
 function pesquisa () {
 	while true;
 	do

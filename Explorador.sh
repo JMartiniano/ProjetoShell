@@ -2,24 +2,31 @@
 
 # Funções
 
+function user () {
+	mkdir $(whoami)
+	cd ./$(whoami)
+}
+
 function dir () {
+	cont=0
 	for i in $(ls);do
 		if [ -d ${i} ]; then
-			echo " <> ${i} "
+			cont=$(( ${cont} + 1 ))
+			echo " [${cont}] ${i} "
 		fi
 	done
-	
+	echo -e "\nTotal de dretórios: ${cont}\n"
 }
 
 function arq () {
 	cont=0
 	for i in $(ls);do
-		cont=$(( ${cont} + 1 ))
 		if [ -f ${i} ];then
+			cont=$(( ${cont} + 1 ))
 			echo " [${cont}] ${i} "
 		fi
 	done
-	echo -e "Total de arquivos: ${cont}\n"
+	echo -e "\nTotal de arquivos: ${cont}\n"
 }
 
 function arqtxt () {
@@ -184,6 +191,102 @@ function subArq () {
 	fi
 }
 
+function subDir () {
+	while true; do
+		
+		caminhoOriginal=$((pwd))
+		echo -e "\n--> Submenu de Diretórios"
+		echo -e "\na) Entrar"
+		echo "b) Apagar"
+		echo "c) Criar Novo"
+		echo -e "q) Sair\n"
+		read -p "Escolha uma opção: " opt
+
+		case ${opt} in
+
+			"a") 
+				echo -e "\nEntrar selecionado"
+				read -p "Nome do diretório: " dir
+				cd ${dir}
+				echo -e "\nVocê está no diretório ${dir}.\nCaminho: $(pwd)"
+				while true; do
+
+					echo -e "\n--> Submenu do diretório ${dir}"
+					echo -e "\na) Criar novo arquivo"
+					echo "b) Criar novo dirétório"
+					echo "c) Listar arquivos"
+					echo "d) Listar diretórios"
+					echo "e) Listar tudo" 
+					echo "f) Apagar arquivo"
+					echo "g) Apagar diretório"
+					echo "h) Apagar tudo"
+					echo -e "q) Sair\n"
+					read -p "Escolha uma opção: " opt
+
+					case ${opt} in
+
+						"b")
+							echo -e "\nCriar novo diretório"
+							read -p "Nome para o novo diretório: " name
+							mkdir ${name} ;;
+						"a")
+							echo -e "\nCriar novo arquivo"
+							read -p "Name para o novo arquivo: " name
+							read -p "Formato do novo arquivo (sem o ponto): " formato
+						       	touch ${name}.${formato} ;;
+						"c")
+							echo -e "\nListar arquivos"
+							arq ;;
+						"d")
+							echo -e"\nListar diretórios"
+							dir ;;
+
+						"e")
+							echo -e"\nListar tudo"
+							ls -l ;;
+
+						"f") 
+							echo -e "\nApagar arquivo"
+							read -p "Nome do arquivo a ser apagado: " arq
+							rm ${arq} ;;
+
+						"g")
+							echo -e "\nApagar diretório"
+							read -p "Nome do diretório a ser apagado: " dir
+							rm -rf ${dir} ;;
+
+						"e")
+							echo -e "\nApagando tudo"
+							read -p "Digite S para apagar tudo e N para cancelar" opt
+							if [ ${opt} == "S" ];then
+								rm *
+							else
+								break
+							fi ;;
+						"q")
+							read -p "Digite o caminho do dirétório inicial: " caminho
+							cd ${caminho}
+							dir
+							break
+					esac
+				done ;;
+			"b") 
+				echo -e "\nApagar selecionado"
+				read -p "Nome do diretório a ser apagado: " dir
+				rm -rf ${dir} ;;
+			"c") 
+				echo -e "\nCriar Novo selecionado"
+				read -p "Nome para o novo diretório: " dir
+				mkdir ${dir}
+				echo -e "Criado! Verifique na lista abaixo:\n"
+				dir ;;
+			"q")
+			       	break ;;
+		esac
+	done
+}
+
+
 # Settings
 
 touch backupSettings.sh
@@ -215,7 +318,8 @@ do
 	elif [ ${opt} == b ];then
 	       	echo -e "\n--> Opção 'b' selecionada"
 		echo -e "Mostrando diretórios locais\n"
-		dir 
+		dir
+		subDir	
 	
 	elif [ ${opt} == c ];then 
 	       	echo -e "\n--> Opção 'c' selecionada"

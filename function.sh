@@ -122,6 +122,6 @@ function clear_terminal () {
 }
 
 function available_space () {
-	echo "Espaço disponível: "
-	df -h | awk 'NR!=1{print $1 $4}'
+	echo "Disco atual: "
+	df -h
 }

@@ -96,12 +96,12 @@ function pesquisa () {
 		case $opt in
 			"a") 
 				read -p "Digite o diretório que deseja buscar: " dir
-				busca=$(find /home -name $dir)
+				busca=$(find /home -name $dir) 2> /dev/null
 				if [ -z $busca ];
 				then
 					echo "Este diretório não existe"
 				fi 2> /dev/null  
-				echo "O diretório se encontra no: ${busca}"
+				echo "O diretório se encontra no: ${busca}" 2> /dev/null
 				;;
 			"b")
 			       read -p "Digite o arquivo que deseja buscar: " arq
@@ -110,7 +110,7 @@ function pesquisa () {
 				then
 					echo "Este arquivo não existe"		
 				fi 2> /dev/null
-				echo "O arquivo se encontra no: ${busca}"
+				echo "O arquivo se encontra no: ${busca}" 2> /dev/null
 				;;
 			"q") break ;;
 		esac
@@ -121,4 +121,7 @@ function clear_terminal () {
 	clear
 }
 
-
+function available_space () {
+	echo "Espaço disponível: "
+	df -h | awk 'NR!=1{print $1 $4}'
+}

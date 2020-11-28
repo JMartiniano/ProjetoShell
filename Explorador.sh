@@ -298,7 +298,7 @@ function subDir () {
 # Settings
 
 touch backupSettings.sh
-echo -e "#!/bin/bash\nmkdir Backup\nmkdir ./Backup/$(date '+%d.%m.%y')" > backupSettings.sh
+echo -e '#!/bin/bash\nmkdir Backup\nmkdir ./Backup/$(date '+%d.%m.%y')' > backupSettings.sh
 chmod u+x backupSettings.sh
 
 # Cabeçalho
@@ -335,6 +335,9 @@ do
 		ls -a | tr ' ' '\n'
 
 	elif [ ${opt} == d ];then 
+		touch backupSettings.sh
+		echo -e "#!/bin/bash\nmkdir Backup\nmkdir ./Backup/$(date '+%d.%m.%y')" > backupSettings.sh
+		
 		echo -e "\n--> Opção 'd' selecionada"
 		echo -e "\nBackup em rede\nCadastrando máquina de backup\nAperte q a qualquer momento para sair\n"
 		read -p "Usuário da máquina: " user

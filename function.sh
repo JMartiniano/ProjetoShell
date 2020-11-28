@@ -74,6 +74,18 @@ function enter_dir () {
 	ls
 }
 
+function rm_dir_not_empty () {
+	read -p "Digite o diretório que deseja remover: " dir
+	rm -rf $dir
+}
+
+function make_dir () {
+	read -p "Digite o nome do diretório que deseja criar: " dir
+	mkdir $dir
+}
+
+
+
 function pesquisa () {
 	while true;
 	do
@@ -84,12 +96,12 @@ function pesquisa () {
 		case $opt in
 			"a") 
 				read -p "Digite o diretório que deseja buscar: " dir
-				busca=$(find /home -name $dir)
+				busca=$(find /home -name $dir) 2> /dev/null
 				if [ -z $busca ];
 				then
 					echo "Este diretório não existe"
 				fi 2> /dev/null  
-				echo "O diretório se encontra no: ${busca}"
+				echo "O diretório se encontra no: ${busca}" 2> /dev/null
 				;;
 			"b")
 			       read -p "Digite o arquivo que deseja buscar: " arq
@@ -98,7 +110,7 @@ function pesquisa () {
 				then
 					echo "Este arquivo não existe"		
 				fi 2> /dev/null
-				echo "O arquivo se encontra no: ${busca}"
+				echo "O arquivo se encontra no: ${busca}" 2> /dev/null
 				;;
 			"q") break ;;
 		esac
@@ -109,4 +121,7 @@ function clear_terminal () {
 	clear
 }
 
-
+function available_space () {
+	echo "Disco atual: "
+	df -h
+}

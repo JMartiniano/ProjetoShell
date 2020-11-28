@@ -199,6 +199,7 @@ function subDir () {
 		echo -e "\na) Entrar"
 		echo "b) Apagar"
 		echo "c) Criar Novo"
+		echo "d) Pesquisa"
 		echo -e "q) Sair\n"
 		read -p "Escolha uma opção: " opt
 
@@ -220,6 +221,7 @@ function subDir () {
 					echo "f) Apagar arquivo"
 					echo "g) Apagar diretório"
 					echo "h) Apagar tudo"
+					echo "i) Pesquisar"
 					echo -e "q) Sair\n"
 					read -p "Escolha uma opção: " opt
 
@@ -255,7 +257,7 @@ function subDir () {
 							read -p "Nome do diretório a ser apagado: " dir
 							rm -rf ${dir} ;;
 
-						"e")
+						"h")
 							echo -e "\nApagando tudo"
 							read -p "Digite S para apagar tudo e N para cancelar" opt
 							if [ ${opt} == "S" ];then
@@ -263,6 +265,9 @@ function subDir () {
 							else
 								break
 							fi ;;
+						"i")
+							echo -e "\nPesquisa"
+							pesquisa ;;
 						"q")
 							read -p "Digite o caminho do dirétório inicial: " caminho
 							cd ${caminho}
@@ -280,6 +285,9 @@ function subDir () {
 				mkdir ${dir}
 				echo -e "Criado! Verifique na lista abaixo:\n"
 				dir ;;
+			"d")
+				echo -e "\nPesquisa"
+				pesquisa ;;
 			"q")
 			       	break ;;
 		esac

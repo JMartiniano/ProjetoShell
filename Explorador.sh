@@ -222,7 +222,8 @@ function subDir () {
 					echo "g) Apagar diretório"
 					echo "h) Apagar tudo"
 					echo "i) Pesquisar"
-					echo -e "q) Sair\n"
+					echo "j) Voltar um diretório"
+					echo -e "q) Sair para outro diretório\n"
 					read -p "Escolha uma opção: " opt
 
 					case ${opt} in
@@ -268,10 +269,15 @@ function subDir () {
 						"i")
 							echo -e "\nPesquisa"
 							pesquisa ;;
+						"j")
+							cd ../
+							dir
+						       	subDir ;;
 						"q")
-							read -p "Digite o caminho do dirétório inicial: " caminho
+							read -p "Digite o caminho do dirétório onde quer ir: " caminho
 							cd ${caminho}
 							dir
+							subDir
 							break
 					esac
 				done ;;
@@ -289,7 +295,7 @@ function subDir () {
 				echo -e "\nPesquisa"
 				pesquisa ;;
 			"q")
-			       	break ;;
+				break;;
 		esac
 	done
 }
@@ -300,6 +306,11 @@ function subDir () {
 touch backupSettings.sh
 echo -e '#!/bin/bash\nmkdir Backup\nmkdir ./Backup/$(date '+%d.%m.%y')' > backupSettings.sh
 chmod u+x backupSettings.sh
+
+# Espaço em disco: 
+
+echo -e "\nDados de discos\n"
+df -h
 
 # Cabeçalho
 

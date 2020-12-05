@@ -1,3 +1,3 @@
 #!/bin/bash
 mkdir Backup
-mkdir ./Backup/28.11.20
+mkdir ./Backup/$(date +%d.%m.%y)

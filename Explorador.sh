@@ -83,22 +83,22 @@ function pesquisa () {
 			"b") 
 				echo -e "\n--> Opção 'b' selecionada"
 				read -p "Digite o diretório que deseja buscar: " dir
-				busca=$(find / -name $dir | tr ' ' '\n' 2>> /dev/null)
-				if [ -z $busca ];
+				busca=$(find / -name $dir | tr ' ' '\n') 2>> /dev/null
+				if [ -z $busca ] ;
 				then
 					echo -e "\nEste diretório não existe"
-				fi 2> /dev/null  
-				echo -e "\nO diretório se encontra no: \n${busca}"
+				fi
+				echo -e "\nO diretório se encontra no: \n${busca}" 2>> /dev/null
 				;;
 			"a")
 				echo -e "\n--> Opção 'a' selecionada"
 			       	read -p "Digite o arquivo que deseja buscar: " arq
-		       		busca=$(find / -name $arq | tr ' ' '\n')
-		 		if [ -z $busca ];
+		       		busca=$(find / -name $arq | tr ' ' '\n') 2>> /dev/null
+		 		if [ -z $busca ] ;
 				then
 					echo -e "Este arquivo não existe"		
-				fi 2> /dev/null
-				echo -e "\nO arquivo se encontra no: \n${busca}"
+				fi
+				echo -e "\nO arquivo se encontra no: \n${busca}" 2> /dev/null
 				;;
 			"q") break ;;
 		esac
@@ -236,10 +236,12 @@ function subDir () {
 						       	touch ${name}.${formato} ;;
 						"c")
 							echo -e "\nListar arquivos"
-							arq ;;
+							arq 
+							subArq ;;
 						"d")
 							echo -e"\nListar diretórios"
-							dir ;;
+							dir
+							subDir ;;
 
 						"e")
 							echo -e"\nListar tudo"
@@ -247,13 +249,15 @@ function subDir () {
 
 						"f") 
 							echo -e "\nApagar arquivo"
-							read -p "Nome do arquivo a ser apagado: " arq
-							rm ${arq} ;;
+							read -p "Nome do arquivo a ser apagado: " arquivo
+							arq
+							rm ${arquivo} ;;
 
 						"g")
 							echo -e "\nApagar diretório"
-							read -p "Nome do diretório a ser apagado: " dir
-							rm -rf ${dir} ;;
+							read -p "Nome do diretório a ser apagado: " diretorio
+							dir
+							rm -rf ${diretorio} ;;
 
 						"e")
 							echo -e "\nApagando tudo"
@@ -264,8 +268,9 @@ function subDir () {
 								break
 							fi ;;
 						"q")
-							read -p "Digite o caminho do dirétório inicial: " caminho
-							cd ${caminho}
+							#read -p "Digite o caminho do dirétório inicial: " caminho
+
+							cd $0
 							dir
 							break
 					esac

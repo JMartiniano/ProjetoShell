@@ -1,6 +1,6 @@
 Neste arquivo vamos botar o que ainda falta fazer:
 
-[1] - Submenu para diretórios (assim como o submenu de arquivos) FEITO
-[2] - Formatar o submenu de arquivos, só pra ficar mais arrumadinha a impressão na tela
-[3] - Mostrar o disco e quanto ainda tem de espaço disponível
-[4] - Resolver o probelma do sair no submenu de diretório X. Usar contador com ../
+[1] - Opção de sair do subDir não ta funcionando certo. Rodar e verificar o erro.
+
+OBS.: Resolvendo isso ta pronto o projeto!
+

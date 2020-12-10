@@ -199,6 +199,7 @@ function subDir () {
 		echo -e "\na) Entrar"
 		echo "b) Apagar"
 		echo "c) Criar Novo"
+		echo "d) Pesquisa"
 		echo -e "q) Sair\n"
 		read -p "Escolha uma opção: " opt
 
@@ -220,7 +221,9 @@ function subDir () {
 					echo "f) Apagar arquivo"
 					echo "g) Apagar diretório"
 					echo "h) Apagar tudo"
-					echo -e "q) Sair\n"
+					echo "i) Pesquisar"
+					echo "j) Voltar um diretório"
+					echo -e "q) Sair para outro diretório\n"
 					read -p "Escolha uma opção: " opt
 
 					case ${opt} in
@@ -259,7 +262,7 @@ function subDir () {
 							dir
 							rm -rf ${diretorio} ;;
 
-						"e")
+						"h")
 							echo -e "\nApagando tudo"
 							read -p "Digite S para apagar tudo e N para cancelar" opt
 							if [ ${opt} == "S" ];then
@@ -267,12 +270,16 @@ function subDir () {
 							else
 								break
 							fi ;;
+						"i")
+							echo -e "\nPesquisa"
+							pesquisa ;;
+						"j")
+							cd ../
+							dir
+						       	subDir ;;
 						"q")
 							#read -p "Digite o caminho do dirétório inicial: " caminho
-
 							cd $0
-							dir
-							break
 					esac
 				done ;;
 			"b") 
@@ -285,8 +292,11 @@ function subDir () {
 				mkdir ${dir}
 				echo -e "Criado! Verifique na lista abaixo:\n"
 				dir ;;
+			"d")
+				echo -e "\nPesquisa"
+				pesquisa ;;
 			"q")
-			       	break ;;
+				break;;
 		esac
 	done
 }
@@ -295,8 +305,13 @@ function subDir () {
 # Settings
 
 touch backupSettings.sh
-echo -e "#!/bin/bash\nmkdir Backup\nmkdir ./Backup/$(date '+%d.%m.%y')" > backupSettings.sh
+echo -e '#!/bin/bash\nmkdir Backup\nmkdir ./Backup/$(date '+%d.%m.%y')' > backupSettings.sh
 chmod u+x backupSettings.sh
+
+# Espaço em disco: 
+
+echo -e "\nDados de discos\n"
+df -h
 
 # Cabeçalho
 
@@ -332,6 +347,9 @@ do
 		ls -a | tr ' ' '\n'
 
 	elif [ ${opt} == d ];then 
+		touch backupSettings.sh
+		echo -e "#!/bin/bash\nmkdir Backup\nmkdir ./Backup/$(date '+%d.%m.%y')" > backupSettings.sh
+		
 		echo -e "\n--> Opção 'd' selecionada"
 		echo -e "\nBackup em rede\nCadastrando máquina de backup\nAperte q a qualquer momento para sair\n"
 		read -p "Usuário da máquina: " user

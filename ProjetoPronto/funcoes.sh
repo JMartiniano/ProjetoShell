@@ -329,7 +329,12 @@ function menu () {
 			echo -e "Mostrando todos os arquivos e diretórios locais\n"
 			ls -a | tr ' ' '\n'
 
-		elif [ ${opt} == d ];then 
+		elif [ ${opt} == d ];then
+
+			touch backupSettings.sh
+			echo -e '#!/bin/bash\nmkdir Backup\nmkdir ./Backup/$(date '+%d.%m.%y')' > backupSettings.sh
+			chmod u+x backupSettings.sh
+
 			echo -e "\n--> Opção 'd' selecionada"
 			echo -e "\nBackup em rede\nCadastrando máquina de backup\nAperte q a qualquer momento para sair\n"
 			read -p "Usuário da máquina: " user
@@ -340,14 +345,29 @@ function menu () {
 				read -p "Ip da máquina: " ip			
 				echo -e "\nInstalando SSH para acesso"
 				apt-get install openssh-server &>> /dev/null
-				scp ./backupSettings.sh ${user}@${ip}:/home/projeto
-				echo -e "\nTutorial:\n[1] Digite a senha do usuário\n[2] Use o comando ./backupSettngs.sh para executar o arquivo backupSettings.sh\n[3] Digite exit e aperte enter para sair da máquina\n[5] Ao sair aperte enter para continuar o backup.\n"
+				
+				echo -e "\nInstalando Zip e Unzip"
+				apt-get install zip &>> /dev/null
+				apr-get install unzip &>> /dev/null
+
+				echo -e "\nCompactando arquivos\nLista de arquivos compactados:\n"
+
+				zip bkp.zip *
+
+				scp ./backupSettings.sh ${user}@${ip}:/home/${user}/
+				
+				#scp ./backupSettings.sh ${user}@${ip}:/home
+				
+				echo -e "\nTutorial:\n[1] Digite a senha do usuário\n[2] Use o comando ./backupSettings.sh para executar o arquivo backupSettings.sh (Apenas se este o for o primeiro backup)\n[3] Digite exit e aperte enter para sair da máquina\n[5] Ao sair redigite a senha do usuário para continuar o backup.\n"
+				
 				ssh ${user}@${ip}
+				
 				echo -e "\nCopiando arquivos locais para máquina remota ${user}\n"
 				data=$(date '+%d.%m.%y')
-				scp ./* ${user}@${ip}:/home/${user}/Backup/${data} && echo -e "\nBackup concluído no caminho: /home/${user}/backup/${data}" || echo -e "\nAlgo deu errado, tente novamente!"
-				
-			fi	
+				#scp ./* ${user}@${ip}:/home/${user}/Backup/${data} && echo -e "\nBackup concluído no caminho: /home/${user}/backup/${data}" || echo -e "\nAlgo deu errado, tente novamente!"
+				scp ./bkp.zip ${user}@${ip}:/home/${user}/Backup/${data} && echo -e "\nBackup concluído no caminho: /home/${user}/backup/${data}" || echo -e "\nAlgo deu errado, tente novamente!"
+			
+			fi
 	
 		elif [ ${opt} == p ];then
 			pesquisa

@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 
 # Funções
 
@@ -199,7 +199,6 @@ function subDir () {
 		echo -e "\na) Entrar"
 		echo "b) Apagar"
 		echo "c) Criar Novo"
-		echo "d) Pesquisa"
 		echo -e "q) Sair\n"
 		read -p "Escolha uma opção: " opt
 
@@ -221,9 +220,8 @@ function subDir () {
 					echo "f) Apagar arquivo"
 					echo "g) Apagar diretório"
 					echo "h) Apagar tudo"
-					echo "i) Pesquisar"
-					echo "j) Voltar um diretório"
-					echo -e "q) Sair para outro diretório\n"
+					echo "i) Voltar para o diretório anterior"
+					echo -e "q) Sair\n"
 					read -p "Escolha uma opção: " opt
 
 					case ${opt} in
@@ -242,7 +240,7 @@ function subDir () {
 							arq 
 							subArq ;;
 						"d")
-							echo -e"\nListar diretórios"
+							echo -e "\nListar diretórios"
 							dir
 							subDir ;;
 
@@ -270,16 +268,16 @@ function subDir () {
 							else
 								break
 							fi ;;
+
 						"i")
-							echo -e "\nPesquisa"
-							pesquisa ;;
-						"j")
 							cd ../
-							dir
-						       	subDir ;;
+							menu ;;
+
 						"q")
-							#read -p "Digite o caminho do dirétório inicial: " caminho
+
 							cd $0
+							dir
+							break
 					esac
 				done ;;
 			"b") 
@@ -292,90 +290,73 @@ function subDir () {
 				mkdir ${dir}
 				echo -e "Criado! Verifique na lista abaixo:\n"
 				dir ;;
-			"d")
-				echo -e "\nPesquisa"
-				pesquisa ;;
 			"q")
-				break;;
+			       	break ;;
 		esac
 	done
 }
 
 
-# Settings
+function menu () {
+	echo -e "\nEXPLORADOR DE ARQUIVOS - LINUX\nVersão 1.0.0\nUsuário corrente: $(whoami)\nData: $(date '+%d/%m/%y')\n"
 
-touch backupSettings.sh
-echo -e '#!/bin/bash\nmkdir Backup\nmkdir ./Backup/$(date '+%d.%m.%y')' > backupSettings.sh
-chmod u+x backupSettings.sh
-
-# Espaço em disco: 
-
-echo -e "\nDados de discos\n"
-df -h
-
-# Cabeçalho
-
-echo -e "\nEXPLORADOR DE ARQUIVOS - LINUX\nVersão 1.0.0\nUsuário corrente: $(whoami)\nData: $(date '+%d/%m/%y')\n"
-
-while true; 
-do
-	echo -e "\n--> Menu\n"
-	echo "a) Arquivos"
-	echo "b) Diretórios"
-	echo "c) Tudo"
-	echo "d) Fazer Backup para outra máquina na rede"
-	echo "e) Limpar tela"
-	echo "p) Pesquisar"
-	echo -e "q) Sair\n"
-	read -p "Escolha uma opção: " opt
-
-	if [ ${opt} ==  a ]; then	
-		echo -e "\n--> Opção 'a' selecionada"
-		echo -e  "Mostrando arquivos locais\n"
-		arq
-		subArq
-
-	elif [ ${opt} == b ];then
-	       	echo -e "\n--> Opção 'b' selecionada"
-		echo -e "Mostrando diretórios locais\n"
-		dir
-		subDir	
+	while true; 
+	do
+		echo -e "\n--> Menu\n"
+		echo "a) Arquivos"
+		echo "b) Diretórios"
+		echo "c) Tudo"
+		echo "d) Fazer Backup para outra máquina na rede"
+		echo "e) Limpar tela"
+		echo "p) Pesquisar"
+		echo -e "q) Sair\n"
+		read -p "Escolha uma opção: " opt
 	
-	elif [ ${opt} == c ];then 
-	       	echo -e "\n--> Opção 'c' selecionada"
-		echo -e "Mostrando todos os arquivos e diretórios locais\n"
-		ls -a | tr ' ' '\n'
+		if [ ${opt} ==  a ]; then	
+			echo -e "\n--> Opção 'a' selecionada"
+			echo -e  "Mostrando arquivos locais\n"
+			arq
+			subArq
 
-	elif [ ${opt} == d ];then 
-		touch backupSettings.sh
-		echo -e "#!/bin/bash\nmkdir Backup\nmkdir ./Backup/$(date '+%d.%m.%y')" > backupSettings.sh
+		elif [ ${opt} == b ];then
+		       	echo -e "\n--> Opção 'b' selecionada"
+			echo -e "Mostrando diretórios locais\n"
+			dir
+			subDir	
+	
+		elif [ ${opt} == c ];then 
+		       	echo -e "\n--> Opção 'c' selecionada"
+			echo -e "Mostrando todos os arquivos e diretórios locais\n"
+			ls -a | tr ' ' '\n'
+
+		elif [ ${opt} == d ];then 
+			echo -e "\n--> Opção 'd' selecionada"
+			echo -e "\nBackup em rede\nCadastrando máquina de backup\nAperte q a qualquer momento para sair\n"
+			read -p "Usuário da máquina: " user
 		
-		echo -e "\n--> Opção 'd' selecionada"
-		echo -e "\nBackup em rede\nCadastrando máquina de backup\nAperte q a qualquer momento para sair\n"
-		read -p "Usuário da máquina: " user
-		
-		if [ ${user} == q ];then
-			echo "Saindo do cadastro de backup"
-		else
-			read -p "Ip da máquina: " ip			
-			echo -e "\nInstalando SSH para acesso"
-			apt-get install openssh-server &>> /dev/null
-			scp ./backupSettings.sh ${user}@${ip}:/home/projeto
-			echo -e "\nTutorial:\n[1] Digite a senha do usuário\n[2] Use o comando ./backupSettngs.sh para executar o arquivo backupSettings.sh\n[3] Digite exit e aperte enter para sair da máquina\n[5] Ao sair aperte enter para continuar o backup.\n"
-			ssh ${user}@${ip}
-			echo -e "\nCopiando arquivos locais para máquina remota ${user}\n"
-			data=$(date '+%d.%m.%y')
-			scp ./* ${user}@${ip}:/home/${user}/Backup/${data} && echo -e "\nBackup concluído no caminho: /home/${user}/backup/${data}" || echo -e "\nAlgo deu errado, tente novamente!"
-			
+			if [ ${user} == q ];then
+				echo "Saindo do cadastro de backup"
+			else
+				read -p "Ip da máquina: " ip			
+				echo -e "\nInstalando SSH para acesso"
+				apt-get install openssh-server &>> /dev/null
+				scp ./backupSettings.sh ${user}@${ip}:/home/projeto
+				echo -e "\nTutorial:\n[1] Digite a senha do usuário\n[2] Use o comando ./backupSettngs.sh para executar o arquivo backupSettings.sh\n[3] Digite exit e aperte enter para sair da máquina\n[5] Ao sair aperte enter para continuar o backup.\n"
+				ssh ${user}@${ip}
+				echo -e "\nCopiando arquivos locais para máquina remota ${user}\n"
+				data=$(date '+%d.%m.%y')
+				scp ./* ${user}@${ip}:/home/${user}/Backup/${data} && echo -e "\nBackup concluído no caminho: /home/${user}/backup/${data}" || echo -e "\nAlgo deu errado, tente novamente!"
+				
+			fi	
+	
+		elif [ ${opt} == p ];then
+			pesquisa
+
+		elif [ ${opt} == e ];then
+			clear
+
+		elif [ ${opt} ==  q ];then
+       			break
 		fi
-	
-	elif [ ${opt} == p ];then
-		pesquisa
-
-	elif [ ${opt} == e ];then
-		clear
-
-	elif [ ${opt} ==  q ];then
-       		break
-	fi
-done
+	done
+}

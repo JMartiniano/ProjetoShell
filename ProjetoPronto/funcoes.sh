@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 # Funções
 
@@ -221,7 +221,8 @@ function subDir () {
 					echo "g) Apagar diretório"
 					echo "h) Apagar tudo"
 					echo "i) Voltar para o diretório anterior"
-					echo -e "q) Sair\n"
+					echo "q) Encerrar o programa"
+					echo -e "r) Return\n"
 					read -p "Escolha uma opção: " opt
 
 					case ${opt} in
@@ -273,11 +274,16 @@ function subDir () {
 							cd ../
 							menu ;;
 
-						"q")
+						"r")
 
 							cd $0
 							dir
-							break
+							break ;;
+
+						"q")
+							echo -e "Programa encerrado!\n"
+							exit 0
+							
 					esac
 				done ;;
 			"b") 
@@ -298,16 +304,17 @@ function subDir () {
 
 
 function menu () {
-	echo -e "\nEXPLORADOR DE ARQUIVOS - LINUX\nVersão 1.0.0\nUsuário corrente: $(whoami)\nData: $(date '+%d/%m/%y')\n"
-
 	while true; 
 	do
+		echo -e "\nEXPLORADOR DE ARQUIVOS - LINUX\nVersão 1.0.0\nUsuário corrente: $(whoami)\nData: $(date '+%d/%m/%y')\nDiretório atual: $(pwd)\n"
 		echo -e "\n--> Menu\n"
 		echo "a) Arquivos"
 		echo "b) Diretórios"
 		echo "c) Tudo"
 		echo "d) Fazer Backup para outra máquina na rede"
 		echo "e) Limpar tela"
+		echo "f) Voltar para o diretório anterior"
+		echo "g) Encerrar o programa"
 		echo "p) Pesquisar"
 		echo -e "q) Sair\n"
 		read -p "Escolha uma opção: " opt
@@ -371,6 +378,10 @@ function menu () {
 	
 		elif [ ${opt} == p ];then
 			pesquisa
+		elif [ ${opt} == f ]; then
+			echo -e "\nOpção 'f' selecionada"
+			echo -e "Voltando para o diretório anterior\n"
+			cd ../ && menu
 
 		elif [ ${opt} == e ];then
 			clear

@@ -83,7 +83,7 @@ function pesquisa () {
 			"b") 
 				echo -e "\n--> Opção 'b' selecionada"
 				read -p "Digite o diretório que deseja buscar: " dir
-				busca=$(find / -name $dir | tr ' ' '\n') 2>> /dev/null
+				busca=$(find /home -name $dir | tr ' ' '\n') 2>> /dev/null
 				if [ -z $busca ] ;
 				then
 					echo -e "\nEste diretório não existe"
@@ -93,7 +93,7 @@ function pesquisa () {
 			"a")
 				echo -e "\n--> Opção 'a' selecionada"
 			       	read -p "Digite o arquivo que deseja buscar: " arq
-		       		busca=$(find / -name $arq | tr ' ' '\n') 2>> /dev/null
+		       		busca=$(find /home -name $arq | tr ' ' '\n') 2>> /dev/null
 		 		if [ -z $busca ] ;
 				then
 					echo -e "Este arquivo não existe"		
@@ -134,52 +134,52 @@ function subArq () {
 
 			case ${opt} in
 				"a")	
-					echo -e "\nMostrando o arquivo ${arq}\n"
-					read -p "Nome do arquivo: " arq
+					echo -e "\nMostrando o arquivo ${arquivo}\n"
+					read -p "Nome do arquivo: " arquivo
 					echo -e "===== Começo do arquivo =====\n" 
-					cat ${arq} 
+					cat ${arquivo} 
 					echo -e "\n===== Fim do Arquivo =====";;
 				"b")	
-					read -p "Nome do arquivo: " arq
-					vim ${arq} ;;
+					read -p "Nome do arquivo: " arquivo
+					vim ${arquivo} ;;
 				"c")
-					read -p "Nome do arquivo: " arq
-					nano ${arq} ;;
+					read -p "Nome do arquivo: " arquivo
+					nano ${arquivo} ;;
 				"d")
-					echo -e "\nApagando o arquivo ${arq}"
-					read -p "Nome do arquivo: " arq
-					rm ${arq}
-					echo -e "\nArquivo ${arq} apagado" ;;
+					echo -e "\nApagando o arquivo ${arquivo}"
+					read -p "Nome do arquivo: " arquivo
+					rm ${arquivo}
+					echo -e "\nArquivo ${arquivo} apagado" ;;
 				"e")
 					echo -e "\nCopiando o arquivo "
-					read -p "Nome do arquivo: " arq
+					read -p "Nome do arquivo: " arquivo
 					read -p "Qual o caminho do destino: " dest
-					cp ${arq} ${dest} ;;
+					cp ${arquivo} ${dest} ;;
 				"d")
 					echo -e "\nMovendo o arquivo"
-					read -p "Nome do arquivo: " arq
+					read -p "Nome do arquivo: " arquivo
 					read -p "Qual o caminho do destino: " dest
-					mv ${arq} ${dest} ;;
+					mv ${arquivo} ${dest} ;;
 				"f")
 					echo -e "\nRenomeando o arquivo"
-					read -p "Nome do arquivo: " arq
+					read -p "Nome do arquivo: " arquivo
 					read -p "Novo nome: " name
-					mv ${arq} ${name} 
-					arq=${name} ;;
+					mv ${arquivo} ${name} 
+					arquivo=${name} ;;
 				"g")
 					echo -e "\nPropriedades do arquivo"
-					read -p "Nome do arquivo: " arq
+					read -p "Nome do arquivo: " arquivo
 					propriedades ;;
 				"h")
-					read -p "Nome do arquivo: " arq
-					touch ${arq}
-					echo -e "Arquivo criado:\n $(ls -l ${arq})" ;;
+					read -p "Nome do arquivo: " arquivo
+					touch ${arquivo}
+					echo -e "Arquivo criado:\n $(ls -l ${arquivo})" ;;
 				"i") 
 					echo -e "\nMudando permissões do arquivo"
-					read -p "Nome do arquivo: " arq
+					read -p "Nome do arquivo: " arquivo
 					read -p "Digite as permissões em forma binária: " permi
-					chmod ${permi} ${arq}
-					echo -e "Permissões modificadas:\n $(ls -l ${arq})" ;;
+					chmod ${permi} ${arquivo}
+					echo -e "Permissões modificadas:\n $(ls -l ${arquivo})" ;;
 					
 				"q")
 					break
@@ -187,7 +187,7 @@ function subArq () {
 
 		done
 	else
-		echo "${arq} não é um arquivo"
+		echo "${arquivo} não é um arquivo"
 	fi
 }
 
@@ -199,6 +199,7 @@ function subDir () {
 		echo -e "\na) Entrar"
 		echo "b) Apagar"
 		echo "c) Criar Novo"
+		echo "d) Digitar o caminho do diretório"
 		echo -e "q) Sair\n"
 		read -p "Escolha uma opção: " opt
 
@@ -208,84 +209,89 @@ function subDir () {
 				echo -e "\nEntrar selecionado"
 				read -p "Nome do diretório: " dir
 				cd ${dir}
-				echo -e "\nVocê está no diretório ${dir}.\nCaminho: $(pwd)"
-				while true; do
+				menu ;;
+				#echo -e "\nVocê está no diretório ${dir}.\nCaminho: $(pwd)"
+				#while true; do
 
-					echo -e "\n--> Submenu do diretório ${dir}"
-					echo -e "\na) Criar novo arquivo"
-					echo "b) Criar novo dirétório"
-					echo "c) Listar arquivos"
-					echo "d) Listar diretórios"
-					echo "e) Listar tudo" 
-					echo "f) Apagar arquivo"
-					echo "g) Apagar diretório"
-					echo "h) Apagar tudo"
-					echo "i) Voltar para o diretório anterior"
-					echo "q) Encerrar o programa"
-					echo -e "r) Return\n"
-					read -p "Escolha uma opção: " opt
+				#	echo -e "\n--> Submenu do diretório ${dir}"
+				#	echo -e "\na) Criar novo arquivo"
+				#	echo "b) Criar novo dirétório"
+				#	echo "c) Listar arquivos"
+				#	echo "d) Listar diretórios"
+				#	echo "e) Listar tudo" 
+				#	echo "f) Apagar arquivo"
+				#	echo "g) Apagar diretório"
+				#	echo "h) Apagar tudo"
+				#	echo "p) Pesquisar"
+				#	echo "i) Voltar para o diretório anterior"
+				#	echo "q) Encerrar o programa"
+				#	echo -e "r) Return\n"
+				#	read -p "Escolha uma opção: " opt
 
-					case ${opt} in
-
-						"b")
-							echo -e "\nCriar novo diretório"
-							read -p "Nome para o novo diretório: " name
-							mkdir ${name} ;;
-						"a")
-							echo -e "\nCriar novo arquivo"
-							read -p "Name para o novo arquivo: " name
-							read -p "Formato do novo arquivo (sem o ponto): " formato
-						       	touch ${name}.${formato} ;;
-						"c")
-							echo -e "\nListar arquivos"
-							arq 
-							subArq ;;
-						"d")
-							echo -e "\nListar diretórios"
-							dir
-							subDir ;;
-
-						"e")
-							echo -e"\nListar tudo"
-							ls -l ;;
-
-						"f") 
-							echo -e "\nApagar arquivo"
-							read -p "Nome do arquivo a ser apagado: " arquivo
-							arq
-							rm ${arquivo} ;;
-
-						"g")
-							echo -e "\nApagar diretório"
-							read -p "Nome do diretório a ser apagado: " diretorio
-							dir
-							rm -rf ${diretorio} ;;
-
-						"h")
-							echo -e "\nApagando tudo"
-							read -p "Digite S para apagar tudo e N para cancelar" opt
-							if [ ${opt} == "S" ];then
-								rm *
-							else
-								break
-							fi ;;
-
-						"i")
-							cd ../
-							menu ;;
-
-						"r")
-
-							cd $0
-							dir
-							break ;;
-
-						"q")
-							echo -e "Programa encerrado!\n"
-							exit 0
-							
-					esac
-				done ;;
+#					case ${opt} in
+#
+#						"b")
+#							echo -e "\nCriar novo diretório"
+#							read -p "Nome para o novo diretório: " name
+#							mkdir ${name} ;;
+#						"a")
+#							echo -e "\nCriar novo arquivo"
+#							read -p "Name para o novo arquivo: " name
+#							read -p "Formato do novo arquivo (sem o ponto): " formato
+#						       	touch ${name}.${formato} ;;
+#						"c")
+#							echo -e "\nListar arquivos"
+#							arq 
+#							subArq ;;
+#						"d")
+#							echo -e "\nListar diretórios"
+#							dir
+#							subDir ;;
+#
+#						"e")
+#							echo -e"\nListar tudo"
+#							ls -l ;;
+#
+#						"f") 
+#							echo -e "\nApagar arquivo"
+#							read -p "Nome do arquivo a ser apagado: " arquivo
+#							arq
+#							rm ${arquivo} ;;
+#
+#						"g")
+#							echo -e "\nApagar diretório"
+#							read -p "Nome do diretório a ser apagado: " diretorio
+#							dir
+#							rm -rf ${diretorio} ;;
+#
+#						"h")
+#							echo -e "\nApagando tudo"
+#							read -p "Digite S para apagar tudo e N para cancelar" opt
+#							if [ ${opt} == "S" ];then
+#								rm *
+#							else
+#								break
+#							fi ;;
+#
+#						"i")
+#							cd ../
+#							menu ;;
+#
+#						"p") 
+#							pesquisa ;;
+#
+#						"r")
+#
+#							cd $0
+#							dir
+#							break ;;
+#
+#						"q")
+#							echo -e "Programa encerrado!\n"
+#							exit 0
+#							
+#					esac
+#				done ;;
 			"b") 
 				echo -e "\nApagar selecionado"
 				read -p "Nome do diretório a ser apagado: " dir
@@ -296,6 +302,12 @@ function subDir () {
 				mkdir ${dir}
 				echo -e "Criado! Verifique na lista abaixo:\n"
 				dir ;;
+
+			"d") 
+				read -p "Digite o caminho do diretório (ex: /home/user): " caminho
+				cd ${caminho} 
+				menu ;;
+
 			"q")
 			       	break ;;
 		esac
@@ -385,6 +397,10 @@ function menu () {
 
 		elif [ ${opt} == e ];then
 			clear
+			
+		elif [ ${opt} == g ]; then
+			exit 0
+		
 
 		elif [ ${opt} ==  q ];then
        			break

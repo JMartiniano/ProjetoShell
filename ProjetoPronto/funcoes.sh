@@ -124,11 +124,13 @@ function subArq () {
 			echo "c) Editar com NANO"
 			echo "d) Apagar"
 			echo "e) Copiar"
-			echo "d) Mover"
-			echo "f) Renomear"
-			echo "g) Propriedades"
-			echo "h) Criar novo arquivo"
-			echo "i) Mudar permissões"
+			echo "f) Mover"
+			echo "g) Renomear"
+			echo "h) Propriedades"
+			echo "i) Criar novo arquivo"
+			echo "j) Mudar permissões"
+			echo "k) Ordenar"
+			echo "l) Filtrar"
 			echo -e "q) Sair\n"
 			read -p "Escolha uma opção: " opt
 
@@ -155,32 +157,36 @@ function subArq () {
 					read -p "Nome do arquivo: " arquivo
 					read -p "Qual o caminho do destino: " dest
 					cp ${arquivo} ${dest} ;;
-				"d")
+				"f")
 					echo -e "\nMovendo o arquivo"
 					read -p "Nome do arquivo: " arquivo
 					read -p "Qual o caminho do destino: " dest
 					mv ${arquivo} ${dest} ;;
-				"f")
+				"g")
 					echo -e "\nRenomeando o arquivo"
 					read -p "Nome do arquivo: " arquivo
 					read -p "Novo nome: " name
 					mv ${arquivo} ${name} 
 					arquivo=${name} ;;
-				"g")
+				"h")
 					echo -e "\nPropriedades do arquivo"
 					read -p "Nome do arquivo: " arquivo
 					propriedades ;;
-				"h")
+				"i")
 					read -p "Nome do arquivo: " arquivo
 					touch ${arquivo}
 					echo -e "Arquivo criado:\n $(ls -l ${arquivo})" ;;
-				"i") 
+				"j") 
 					echo -e "\nMudando permissões do arquivo"
 					read -p "Nome do arquivo: " arquivo
 					read -p "Digite as permissões em forma binária: " permi
 					chmod ${permi} ${arquivo}
 					echo -e "Permissões modificadas:\n $(ls -l ${arquivo})" ;;
-					
+				
+				"k") subOrd ;;
+
+				"l") Filter ;;
+
 				"q")
 					break
 			esac
@@ -210,88 +216,6 @@ function subDir () {
 				read -p "Nome do diretório: " dir
 				cd ${dir}
 				menu ;;
-				#echo -e "\nVocê está no diretório ${dir}.\nCaminho: $(pwd)"
-				#while true; do
-
-				#	echo -e "\n--> Submenu do diretório ${dir}"
-				#	echo -e "\na) Criar novo arquivo"
-				#	echo "b) Criar novo dirétório"
-				#	echo "c) Listar arquivos"
-				#	echo "d) Listar diretórios"
-				#	echo "e) Listar tudo" 
-				#	echo "f) Apagar arquivo"
-				#	echo "g) Apagar diretório"
-				#	echo "h) Apagar tudo"
-				#	echo "p) Pesquisar"
-				#	echo "i) Voltar para o diretório anterior"
-				#	echo "q) Encerrar o programa"
-				#	echo -e "r) Return\n"
-				#	read -p "Escolha uma opção: " opt
-
-#					case ${opt} in
-#
-#						"b")
-#							echo -e "\nCriar novo diretório"
-#							read -p "Nome para o novo diretório: " name
-#							mkdir ${name} ;;
-#						"a")
-#							echo -e "\nCriar novo arquivo"
-#							read -p "Name para o novo arquivo: " name
-#							read -p "Formato do novo arquivo (sem o ponto): " formato
-#						       	touch ${name}.${formato} ;;
-#						"c")
-#							echo -e "\nListar arquivos"
-#							arq 
-#							subArq ;;
-#						"d")
-#							echo -e "\nListar diretórios"
-#							dir
-#							subDir ;;
-#
-#						"e")
-#							echo -e"\nListar tudo"
-#							ls -l ;;
-#
-#						"f") 
-#							echo -e "\nApagar arquivo"
-#							read -p "Nome do arquivo a ser apagado: " arquivo
-#							arq
-#							rm ${arquivo} ;;
-#
-#						"g")
-#							echo -e "\nApagar diretório"
-#							read -p "Nome do diretório a ser apagado: " diretorio
-#							dir
-#							rm -rf ${diretorio} ;;
-#
-#						"h")
-#							echo -e "\nApagando tudo"
-#							read -p "Digite S para apagar tudo e N para cancelar" opt
-#							if [ ${opt} == "S" ];then
-#								rm *
-#							else
-#								break
-#							fi ;;
-#
-#						"i")
-#							cd ../
-#							menu ;;
-#
-#						"p") 
-#							pesquisa ;;
-#
-#						"r")
-#
-#							cd $0
-#							dir
-#							break ;;
-#
-#						"q")
-#							echo -e "Programa encerrado!\n"
-#							exit 0
-#							
-#					esac
-#				done ;;
 			"b") 
 				echo -e "\nApagar selecionado"
 				read -p "Nome do diretório a ser apagado: " dir
@@ -310,6 +234,63 @@ function subDir () {
 
 			"q")
 			       	break ;;
+		esac
+	done
+}
+
+
+function subOrd () {
+	while true; do
+		echo -e "\nOrdenando os arquivos!\n"
+		echo "a) Ordenar por grupo"
+		echo "b) Ordenar por extensão"
+		echo "q) Sair"
+		read -p "Escolha uma opção: " opt
+
+		case ${opt} in
+			"a") 
+				echo -e "\nOrdenando os arquivos por grupos! \n"
+				echo -e "Grupo	Arquivo\n"
+				ls -lp | grep -v / | awk 'NR>2{print $3"	"$NF}' | sort ;;
+
+			"b") 
+				echo -e "\nOrdenando por extensão! \n"
+				cont=0
+				for i in $(ls -X);do
+					if [ -f ${i} ];then
+						cont=$(( ${cont} + 1 ))
+						echo " [${cont}] ${i} "
+					fi
+				done
+				echo -e "\nTotal de arquivos: ${cont}\n" ;;
+
+			"q") break
+
+		esac
+	done
+}
+
+function Filter () {
+	while true; do
+		echo -e "\nFiltrando os arquivos!\n"
+		echo "a) Filtrar por extensão"
+		echo "b) Filtrar por grupo"
+		echo "q) Sair"
+		read -p "Escolha uma opção: " opt
+
+		case ${opt} in
+
+			"a") 
+				read -p "Digite a extensão que deseja filtrar (sem o ponto): " ext
+				echo -e "\nArquivos .${ext}: \n "
+				arq | grep .${ext} ;;
+
+			"b") 
+				read -p "Digite o grupo que deseja filtrar: " grp
+				echo -e "\nArquivos pertencentes ai grupo ${grp}: \n"
+				find $(pwd) -group ${grp} | awk -F '/' '{print $NF}' ;;
+
+			"q") break ;;
 		esac
 	done
 }
